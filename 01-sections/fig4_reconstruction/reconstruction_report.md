@@ -73,59 +73,59 @@ $$
 
 代码管线将连续的测试数据切分为了 6 个“动作组”（Action 1 到 6）。为了方便直观比对，下方汇总了各动作对应的 **应变角 (Strain Angle)**、**三维力 (3D Force)** 和 **摩擦电 (Tribo Array)** 渲染图。
 
-所有的图片文件都存放在 `https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/` 目录下。
+所有的图片文件都存放在 `https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/` 目录下。
 
 ### 🟢 动作 1：动态抓法 (Dynamic Grasping)
 - 对应切片：Strain (s) | 3D Force (m) | Tribo (g)
 
-![Action 1 - Strain](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_s.png)
-![Action 1 - 3D Force](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_m.png)
-![Action 1 - Tribo](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_g.png)
+![Action 1 - Strain](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_s.png)
+![Action 1 - 3D Force](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_m.png)
+![Action 1 - Tribo](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_g.png)
 
 ---
 
 ### 🟢 动作 2：静态抓法 (Static Grasping)
 - 对应切片：Strain (t) | 3D Force (n) | Tribo (h)
 
-![Action 2 - Strain](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_t.png)
-![Action 2 - 3D Force](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_n.png)
-![Action 2 - Tribo](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_h.png)
+![Action 2 - Strain](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_t.png)
+![Action 2 - 3D Force](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_n.png)
+![Action 2 - Tribo](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_h.png)
 
 ---
 
 ### 🟢 动作 3：动态揉法 (Dynamic Kneading)
 - 对应切片：Strain (u) | 3D Force (o) | Tribo (i)
 
-![Action 3 - Strain](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_u.png)
-![Action 3 - 3D Force](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_o.png)
-![Action 3 - Tribo](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_i.png)
+![Action 3 - Strain](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_u.png)
+![Action 3 - 3D Force](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_o.png)
+![Action 3 - Tribo](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_i.png)
 
 ---
 
 ### 🟢 动作 4：静态揉法 (Static Kneading)
 - 对应切片：Strain (v) | 3D Force (p) | Tribo (j)
 
-![Action 4 - Strain](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_v.png)
-![Action 4 - 3D Force](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_p.png)
-![Action 4 - Tribo](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_j.png)
+![Action 4 - Strain](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_v.png)
+![Action 4 - 3D Force](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_p.png)
+![Action 4 - Tribo](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_j.png)
 
 ---
 
 ### 🟢 动作 5：动态点法 (Dynamic Pressing)
 - 对应切片：Strain (w) | 3D Force (q) | Tribo (k)
 
-![Action 5 - Strain](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_w.png)
-![Action 5 - 3D Force](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_q.png)
-![Action 5 - Tribo](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_k.png)
+![Action 5 - Strain](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_w.png)
+![Action 5 - 3D Force](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_q.png)
+![Action 5 - Tribo](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_k.png)
 
 ---
 
 ### 🟢 动作 6：静态点法 (Static Pressing)
 - 对应切片：Strain (x) | 3D Force (r) | Tribo (l)
 
-![Action 6 - Strain](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_x.png)
-![Action 6 - 3D Force](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_r.png)
-![Action 6 - Tribo](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_l.png)
+![Action 6 - Strain](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_strain_array/Strain_Angle_Grid_Nx3_x.png)
+![Action 6 - 3D Force](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_3d_force/3D_Force_Grid_Nx3_r.png)
+![Action 6 - Tribo](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/fig4_reconstruction/renders/figure_tribo_array/Tribo_Grid_Nx3_l.png)
 
 ---
 
@@ -144,4 +144,4 @@ $$
 
 下图（SI-3）展示了程序汇总渲染的多组不同实验条件下传感器的灵敏度标定曲线特征：
 
-![Strain Sensitivity Calibration Result](https://raw.githubusercontent.com/ipc-robot/glove/main/01-sections/strain_sensitivity/renders/SI-3.png)
+![Strain Sensitivity Calibration Result](https://cdn.jsdelivr.net/gh/ipc-robot/glove@main/01-sections/strain_sensitivity/renders/SI-3.png)
