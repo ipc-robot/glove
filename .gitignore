@@ -1,0 +1,29 @@
+# COMSOL Simulation binaries
+**/*.mph
+**/*.mphbin
+
+# Python standard
+__pycache__/
+*.py[cod]
+*.so
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Project Specific Data rules
+01_data_processing/raw_dataset/*
+!01_data_processing/raw_dataset/.gitkeep
+
+# 忽略巨大的原始数据，避免推送到 GitHub 时触发限制
+**/*.csv
+**/*.parquet
+
+# 强制保留渲染的图片（即使上级目录被忽略）
+!**/renders/**/*.png
+!**/renders/**/*.svg

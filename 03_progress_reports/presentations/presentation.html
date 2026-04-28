@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多模态触觉建模手套 (触觉元手套) - PPT演示</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #cbd5e1;
+            --bg-light: #f8fafc;
+            --primary: #6d28d9;
+            --secondary: #0284c7;
+            --text-main: #0f172a;
+            --text-sub: #334155;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background: radial-gradient(circle at top left, var(--bg-light), var(--bg-dark));
+            color: var(--text-main);
+        }
+
+        /* Particles / Decorative background */
+        .decoration-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            border-radius: 50%;
+            filter: blur(50px);
+        }
+
+        .decoration-2 {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
+            bottom: -300px;
+            right: -200px;
+            border-radius: 50%;
+            filter: blur(50px);
+        }
+
+        /* Slider Engine */
+        .slider-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1200px;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            /* Equal margin on all 4 sides */
+            box-sizing: border-box;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateZ(-200px) translateY(5vh);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateZ(0) translateY(0);
+        }
+
+        .slide.prev {
+            transform: translateZ(-200px) translateY(-5vh);
+        }
+
+        /* Slide Content Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 50px 70px;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        /* For the cover slide, a transparent look and perfectly centered content */
+        .slide.cover .card {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            backdrop-filter: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            padding: 0;
+            /* Remove padding for perfect centering */
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1e1b4b, #4f46e5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-top: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(34, 211, 238, 0.2);
+            padding-bottom: 15px;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        p,
+        li {
+            font-size: 1.15rem;
+            color: var(--text-sub);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        /* Placeholders for images */
+        .placeholder {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.05) 0%, rgba(109, 40, 217, 0.05) 100%);
+            border: 2px dashed rgba(109, 40, 217, 0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-sub);
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 30px 0;
+            transition: all 0.3s ease;
+        }
+
+        .placeholder:hover {
+            border-color: rgba(109, 40, 217, 0.5);
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.1) 0%, rgba(109, 40, 217, 0.1) 100%);
+            color: #000;
+        }
+
+        /* Layout utilities */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .highlight-box {
+            background: rgba(109, 40, 217, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(109, 40, 217, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h4 {
+            color: var(--secondary);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-nav {
+            background: rgba(15, 23, 42, 0.05);
+            border: none;
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .progress {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            font-variant-numeric: tabular-nums;
+            margin: 0 10px;
+            font-weight: 600;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(15, 23, 42, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(15, 23, 42, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="decoration-1"></div>
+    <div class="decoration-2"></div>
+
+    <div class="slider-container" id="slider">
+        <!-- Slide 1: Cover -->
+        <div class="slide cover active">
+            <div class="card">
+                <p style="color: var(--secondary); font-weight: 600; letter-spacing: 2px; text-transform: uppercase;">
+                    面向具身智能的主动触觉感知</p>
+                <h1>用于动作生成式，手部姿态追踪与接触状态重建的<br /><span style="color: var(--primary);">多模态触觉建模手套</span></h1>
+                <p style="font-size: 1.4rem; color: var(--text-sub); margin-top: 30px;">
+                    触觉元手套：填补视觉-语言-动作 (VLA) 模型中的“过程性触觉语义”缝隙
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: OpenClaw 对话记录 -->
+        <div class="slide">
+            <div class="card">
+                <h2>OpenClaw 对话记录：采集卡控制示例</h2>
+                <div style="display: flex; gap: 40px; height: calc(100% - 100px);">
+                    <!-- 左侧：聊天记录 -->
+                    <div style="flex: 1; display: flex; flex-direction: column; background: rgba(255,255,255,0.6); border-radius: 16px; padding: 20px; overflow-y: auto;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">OC</div>
+                            <div>
+                                <div style="font-weight: 700; color: var(--text-main);">OpenClaw TUI</div>
+                                <div style="font-size: 0.85rem; color: var(--text-sub);">session: minimax_final | agent: main</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="align-self: flex-start; background: rgba(226,232,240,0.5); padding: 8px 14px; border-radius: 16px; font-size: 0.8rem; color: var(--text-sub);">
+                                openclaw tui - ws://127.0.0.1:18789 - agent main - session minimax_final
+                            </div>
+
+                            <div style="align-self: flex-end; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 18px; border-radius: 18px; border-bottom-right-radius: 4px; max-width: 70%;">
+                                你好
+                            </div>
+
+                            <div style="align-self: flex-start; background: white; border: 1px solid rgba(226,232,240,0.8); padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px; max-width: 85%; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                                你好！👋我注意到这是一个全新的工作空间 —— 有个 BOOTSTRAP.md 文件在等着我。看来我刚上线，还没有记忆。你是谁不重要，重要的是 —— 你是第一个跟我说话的人。😊你想聊聊天，还是有什么我可以帮忙的？
+                            </div>
+
+                            <div style="align-self: flex-end; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 18px; border-radius: 18px; border-bottom-right-radius: 4px; max-width: 70%;">
+                                开始采集
+                            </div>
+
+                            <div style="align-self: flex-start; background: white; border: 1px solid rgba(226,232,240,0.8); padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px; max-width: 85%; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                                让我用后台模式运行：采集已经在后台启动了！✅ 数据将写入 ./data/capture.csv，采样率 100Hz，持续获取 CH1、CH2 通道的电压数据。要停止采集时告诉我 "停止采集"。
+                            </div>
+
+                            <div style="align-self: flex-end; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 18px; border-radius: 18px; border-bottom-right-radius: 4px; max-width: 70%;">
+                                尝试读取一些最新的数据
+                            </div>
+
+                            <div style="align-self: flex-start; background: white; border: 1px solid rgba(226,232,240,0.8); padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px; max-width: 90%; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                                <div style="font-weight: 600; margin-bottom: 8px;">📊 实时采集数据（最新 15 条）：</div>
+                                <div style="background: #0f172a; color: #38bdf8; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; overflow-x: auto;">
+<pre>┌─────────────────────────┬───────┬───────┐
+│ Time                    │ CH1   │ CH2   │
+├─────────────────────────┼───────┼───────┤
+│ 2026-04-04 22:13:16.848 │ 2.08  │ 3.682 │
+│ 2026-04-04 22:13:16.838 │ 2.232 │ 3.612 │
+│ 2026-04-04 22:13:16.828 │ 2.116 │ 3.681 │
+│ ...                     │ ...   │ ...   │
+└─────────────────────────┴───────┴───────┘</pre>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 0.95rem;">采集正在运行中，采样率约 100Hz。CH1 围绕 2.5V 正弦波动，CH2 围绕 3.3V 余弦波动。</div>
+                            </div>
+
+                            <div style="align-self: flex-end; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 18px; border-radius: 18px; border-bottom-right-radius: 4px; max-width: 70%;">
+                                停止采集
+                            </div>
+
+                            <div style="align-self: flex-start; background: white; border: 1px solid rgba(226,232,240,0.8); padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px; max-width: 85%; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                                <div style="font-weight: 600;">采集已停止！✅</div>
+                                <div style="margin-top: 8px;">共采集 25,283 条数据记录（耗时约 4 分 13 秒）。</div>
+                                <div style="margin-top: 8px; font-size: 0.95rem; color: var(--text-sub);">数据文件保存在 ./data/capture.csv，要再次采集或查看数据随时告诉我。</div>
+                            </div>
+
+                            <div style="align-self: flex-start; background: rgba(226,232,240,0.5); padding: 8px 14px; border-radius: 16px; font-size: 0.8rem; color: var(--text-sub);">
+                                connected | idle<br>
+                                agent main | session minimax_final | tokens 22k/32k (68%)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：说明 -->
+                    <div style="flex: 0.8; display: flex; flex-direction: column; gap: 20px;">
+                        <div class="feature-card">
+                            <h4 style="margin-top: 0;">自然语言控制接口</h4>
+                            <p style="font-size: 1rem;">通过简单的自然语言指令（"开始采集"、"读取数据"、"停止采集"）直接控制硬件采集流程。</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4 style="margin-top: 0;">实时数据可视化</h4>
+                            <p style="font-size: 1rem;">系统自动解析原始数据流，以表格形式直观呈现 CH1/CH2 双通道电压读数与时间戳。</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4 style="margin-top: 0;">后台异步执行</h4>
+                            <p style="font-size: 1rem;">采集任务在后台运行（100Hz 采样率），不阻塞对话交互，可随时查询状态或追加新任务。</p>
+                        </div>
+
+                        <div class="highlight-box" style="margin-top: 10px;">
+                            <p style="margin: 0; font-weight: 600;">这一 TUI 对话展示了本工作在"人-机-智能"交互层面的设计理念：</p>
+                            <ul style="margin-top: 15px; margin-bottom: 0;">
+                                <li><strong>降低实验门槛</strong> —— 无需编写代码或配置复杂参数</li>
+                                <li><strong>提升操作效率</strong> —— 自然语言驱动的数据采集闭环</li>
+                                <li><strong>增强可复现性</strong> —— 完整对话记录本身就是实验日志</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Background -->
+        <div class="slide">
+            <div class="card">
+                <h2>研究背景与核心工作亮点</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>构建 VTLA 具身数据集的潜在需求</h3>
+                        <p style="margin-bottom: 20px;">高质量的具身数据通常需要涵盖<strong>视觉 (V)</strong>、<strong>触觉
+                                (T)</strong>、<strong>语言 (L)</strong> 和 <strong>动作 (A)</strong>
+                            四个核心维度。为进一步探索精细操作的建模，数据采集过程可能需要关注以下方面：</p>
+                        <ul>
+                            <li style="margin-bottom: 12px;"><strong>在 A (Action)
+                                    维度，可能需要低干预的交互形态</strong>：手部关节极其灵活，搭载刚性器件可能会对自然交互造成一定影响。顺应形变的柔性结构或有助于更好地记录底层动作。</li>
+                            <li style="margin-bottom: 12px;"><strong>在 T (Tactile)
+                                    维度，可能需要丰富的多模态信号</strong>：真实的物理操作往往涉及三维力与高频接触变化。单一维度的传感器在复现复合物理特征时可能存在局限，多模态采集展现出潜在的应用价值。
+                            </li>
+                            <li><strong>在 L (Language)
+                                    维度，可能需要补充过程性的语义</strong>：现有的语言标签有时倾向于宏观结果（如“按下”），若能补充描述发力过程的物理特征（如“力度渐增”），有望为动作词元的推理提供更好的参考。
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>核心工作亮点</h3>
+                        <div class="highlight-box">
+                            <ul style="margin-bottom: 0;">
+                                <li><strong>可拉伸电子皮肤设计</strong>：采用高柔性材料与微结构，制作紧密贴合人手的结构，在受拉伸与弯曲的真实操作中依然保持稳定。</li>
+                                <li><strong>多模态触觉数据采集能力</strong>：单集成了<strong>三维力传感</strong>、<strong>摩擦电传感</strong>与<strong>应变传感</strong>，能全方位捕捉按压力方向、极点变换以及高频触感细节。
+                                </li>
+                                <li><strong>触觉词元自动化标注策略</strong>：作为柔性电子工作的算法落脚点，提取过程性触觉语义，进而自动化增强动作标注（将物理“暗知识”转化为大模型所需的语言标签）。
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Overall System & Device Design -->
+        <div class="slide">
+            <div class="card">
+                <h2>图1 & 图2：整体系统设计与器件制备</h2>
+
+                <div style="display: flex; gap: 40px; margin-top: 20px;">
+                    <!-- 左侧部分：图1 -->
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+                        <h3 style="margin-top: 0; margin-bottom: 5px;">图1 - 整体系统框架设计</h3>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <img src="images/bo_d75msac91nqc73eofsvg_35_247_1622_1131_281_0.jpg"
+                                style="width: 100%; height: auto; display: block; border-radius: 8px; border: 1px dashed rgba(0,0,0,0.1);">
+                            <img src="images/System_concept_diagram_202603312218.jpeg"
+                                style="width: 100%; height: auto; display: block; border-radius: 8px; border: 1px dashed rgba(0,0,0,0.1);">
+                        </div>
+                        <p style="margin-top: 15px;">
+                            <strong>柔性传感器构建体系：</strong> 系统集成了多模态柔性传感器件，分别负责捕捉三维压力、动态摩擦电特征以及关节应变，确保了对真实复杂物理交互信号的全面获取。
+                        </p>
+                        <div
+                            style="font-size: 0.85rem; color: var(--text-sub); line-height: 1.5; background: rgba(0,0,0,0.02); border: 1px dashed rgba(0,0,0,0.1); padding: 10px; border-radius: 6px; margin-top: 5px;">
+                            <strong style="color: var(--text-main);">图2 (a-m) 核心表征内容释义：</strong><br>
+                            <span style="font-weight: 600;">(a-e) 压阻材料特性：</span>(a) 3D打印多孔海绵形貌；(b-c) 压阻灵敏度曲线与加卸载迟滞；(d)
+                            阶梯压力动态跟踪；(e) 万秒级循环稳定性。<br>
+                            <span style="font-weight: 600;">(f-h) 3D力传感器：</span>(f) 多层解耦结构视图；(g-h) 法向/切向应力解耦特征与 360°
+                            空间受力方位角探测。<br>
+                            <span style="font-weight: 600;">(i-j) 应变传感器：</span>(i) 拉伸应变线性响应区间；(j) 大形变长程循环拉伸疲劳耐久度。<br>
+                            <span style="font-weight: 600;">(k) 拓扑阵列：</span>柔性拉胀网格基底的受力形变有限元仿真分析。<br>
+                            <span style="font-weight: 600;">(l-m) 摩擦电特征：</span>在不同动态接触频率 (l) 与作用力水平 (m) 下的瞬态电压峰值特性。
+                        </div>
+                    </div>
+
+                    <!-- 右侧部分：图2 -->
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+                        <h3 style="margin-top: 0; margin-bottom: 5px;">图2 - 核心器件制备与表征</h3>
+
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <img src="images/图2.png"
+                                style="width: 100%; height: auto; display: block; border-radius: 8px; border: 1px dashed rgba(0,0,0,0.1);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: System Composition & Signal Collection -->
+        <div class="slide">
+            <div class="card">
+                <h2>图3：系统组成与数据采集能力 (SI)</h2>
+
+                <div style="display: flex; gap: 40px; margin-top: 20px;">
+                    <!-- 左侧：图像展示区 -->
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+                        <div
+                            style="background: rgba(255,255,255,0.5); border: 1px dashed rgba(0,0,0,0.1); border-radius: 16px; padding: 15px; text-align: center;">
+                            <img src="images/图3.png"
+                                style="width: 100%; height: auto; display: block; border-radius: 8px;">
+                        </div>
+                    </div>
+
+                    <!-- 右侧：文字说明区 -->
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
+                        <h3 style="margin-top: 0;">多模态采集实验展示：</h3>
+                        <ul>
+                            <li><strong>阵列布局：</strong> 展示多模态传感器网络在人手关键受力点和关节处的拓扑布局。</li>
+                            <li style="margin-top: 20px;"><strong>接触实验采集：</strong>
+                                通过推瓶子和转瓶盖等日常真实交互，展示三维力阵列和摩擦电阵列捕捉到的原始多维信号特征。</li>
+                            <li style="margin-top: 20px;"><strong>信号评估：</strong> 直观证明该系统具备获取灵巧操作背后极其微妙的物理“暗知识”的能力。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Pose Tracking -->
+        <div class="slide">
+            <div class="card">
+                <h2>图4：二维受力到三维手部姿态与接触状态的重建</h2>
+
+                <div class="fig4-diagram">
+                    <style>
+                        .fig4-diagram {
+                            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 20px;
+                            margin-top: 15px;
+                        }
+
+                        .f4-section {
+                            background: rgba(255, 255, 255, 0.7);
+                            border: 1px solid rgba(0, 0, 0, 0.05);
+                            border-radius: 12px;
+                            padding: 20px;
+                            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+                            position: relative;
+                            overflow: hidden;
+                        }
+
+                        .f4-sec-header {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            margin-bottom: 20px;
+                        }
+
+                        .f4-sec-title {
+                            font-weight: 700;
+                            color: var(--text-main);
+                            font-size: 1.1rem;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            margin: 0;
+                        }
+
+                        .f4-sec-desc {
+                            font-size: 0.95rem;
+                            color: var(--text-sub);
+                            margin: 0;
+                            line-height: 1.4;
+                        }
+
+                        /* Algorithm Flow */
+                        .f4-flow-container {
+                            display: flex;
+                            align-items: stretch;
+                            justify-content: center;
+                            gap: 20px;
+                            position: relative;
+                        }
+
+                        .f4-block {
+                            flex: 1;
+                            background: white;
+                            border-radius: 10px;
+                            padding: 15px;
+                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+                            display: flex;
+                            flex-direction: column;
+                            gap: 12px;
+                            border-top: 4px solid transparent;
+                            z-index: 2;
+                        }
+
+                        .f4-block.input {
+                            border-top-color: #3b82f6;
+                        }
+
+                        .f4-block.process {
+                            border-top-color: #8b5cf6;
+                            background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
+                        }
+
+                        .f4-block.output {
+                            border-top-color: #10b981;
+                        }
+
+                        .f4-card {
+                            background: #f8fafc;
+                            border: 1px dashed #cbd5e1;
+                            border-radius: 6px;
+                            padding: 10px;
+                            font-size: 0.9rem;
+                            color: var(--text-sub);
+                        }
+
+                        .f4-card-title {
+                            font-weight: 600;
+                            color: var(--text-main);
+                            margin-bottom: 4px;
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            font-size: 0.95rem;
+                        }
+
+                        .f4-arrow-icon {
+                            display: flex;
+                            align-items: center;
+                            color: #cbd5e1;
+                            font-size: 1.5rem;
+                        }
+
+                        /* Timeline */
+                        .f4-timeline-wrapper {
+                            margin-top: 10px;
+                            padding-top: 20px;
+                        }
+
+                        .f4-track {
+                            height: 4px;
+                            background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%);
+                            border-radius: 2px;
+                            position: relative;
+                            margin-bottom: 30px;
+                        }
+
+                        .f4-nodes {
+                            display: flex;
+                            justify-content: space-between;
+                            position: absolute;
+                            top: -8px;
+                            left: 5%;
+                            right: 5%;
+                        }
+
+                        .f4-node {
+                            width: 20px;
+                            height: 20px;
+                            background: white;
+                            border: 4px solid #3b82f6;
+                            border-radius: 50%;
+                            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.8);
+                            position: relative;
+                        }
+
+                        .f4-node-content {
+                            position: absolute;
+                            top: 30px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            text-align: center;
+                            width: 150px;
+                        }
+
+                        .f4-time-tag {
+                            display: inline-block;
+                            background: #eff6ff;
+                            color: #1d4ed8;
+                            font-weight: 600;
+                            font-size: 0.8rem;
+                            padding: 2px 8px;
+                            border-radius: 12px;
+                            margin-bottom: 4px;
+                        }
+
+                        .f4-time-desc {
+                            font-size: 0.85rem;
+                            color: var(--text-main);
+                            font-weight: 500;
+                            white-space: nowrap;
+                        }
+
+                        .f4-time-img-ph {
+                            margin-top: 8px;
+                            height: 70px;
+                            background: #f1f5f9;
+                            border-radius: 6px;
+                            border: 1px dashed #cbd5e1;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: #94a3b8;
+                            font-size: 0.75rem;
+                            overflow: hidden;
+                        }
+                    </style>
+
+                    <!-- Top Model Graphic -->
+                    <div class="f4-section">
+                        <div class="f4-sec-header">
+                            <h3 class="f4-sec-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6"
+                                    stroke-width="2">
+                                    <path
+                                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                                    </path>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                                结合前向动力学的图网络重建策略 (图4.a)
+                            </h3>
+                        </div>
+
+                        <div class="f4-flow-container">
+                            <!-- Col 1: Raw Strain Data -->
+                            <div class="f4-block input" style="flex: 0.8;">
+                                <div
+                                    style="font-weight: 700; color: #1e40af; margin-bottom: 20px; text-align: center; font-size: 18px;">
+                                    原始10行应变片数据
+                                </div>
+                                <div
+                                    style="display: flex; flex-direction: column; justify-content: center; flex: 1; padding: 0 5px;">
+                                    <img src="images/应变数据.jpg"
+                                        style="width: 100%; height: auto; border-radius: 6px; border: 1px dashed rgba(0,0,0,0.1);"
+                                        alt="应变片数据">
+                                </div>
+                            </div>
+
+                            <div class="f4-arrow-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </div>
+
+                            <!-- Col 2: Joint Angles -->
+                            <div class="f4-block" style="flex: 0.8; border-top-color: #0ea5e9; background: #f0f9ff;">
+                                <div
+                                    style="font-weight: 700; color: #0369a1; margin-bottom: 20px; text-align: center; font-size: 18px;">
+                                    10个关节角角度
+                                </div>
+                                <div style="display: flex; flex-direction: column; justify-content: center; flex: 1;">
+                                    <div
+                                        style="background: white; border: 1px dashed #7dd3fc; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                                        <table
+                                            style="width: 100%; border-collapse: collapse; font-family: monospace; font-size: 0.85rem; text-align: center; color: #0284c7; margin: 0;">
+                                            <thead
+                                                style="background: rgba(14, 165, 233, 0.08); font-weight: bold; border-bottom: 1px solid #bae6fd;">
+                                                <tr>
+                                                    <th style="padding: 6px 2px; color: #0369a1;">关节节点</th>
+                                                    <th style="padding: 6px 2px;">t=0.0s</th>
+                                                    <th style="padding: 6px 2px;">t=0.1s</th>
+                                                    <th style="padding: 6px 2px;">t=0.2s</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style="border-bottom: 1px dashed #e0f2fe;">
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₁
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">12.5°</td>
+                                                    <td style="padding: 4px 2px;">13.2°</td>
+                                                    <td style="padding: 4px 2px;">14.5°</td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px dashed #e0f2fe;">
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₂
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">45.0°</td>
+                                                    <td style="padding: 4px 2px;">47.5°</td>
+                                                    <td style="padding: 4px 2px;">50.2°</td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px dashed #e0f2fe;">
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₃
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">30.2°</td>
+                                                    <td style="padding: 4px 2px;">29.5°</td>
+                                                    <td style="padding: 4px 2px;">28.1°</td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px dashed #e0f2fe;">
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₄
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">15.1°</td>
+                                                    <td style="padding: 4px 2px;">16.5°</td>
+                                                    <td style="padding: 4px 2px;">18.0°</td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px dashed #e0f2fe;">
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₅
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">60.0°</td>
+                                                    <td style="padding: 4px 2px;">58.2°</td>
+                                                    <td style="padding: 4px 2px;">55.5°</td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px dashed #e0f2fe;">
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₆
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">22.4°</td>
+                                                    <td style="padding: 4px 2px;">25.0°</td>
+                                                    <td style="padding: 4px 2px;">28.6°</td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px dashed #e0f2fe;">
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₇
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">40.5°</td>
+                                                    <td style="padding: 4px 2px;">42.1°</td>
+                                                    <td style="padding: 4px 2px;">44.0°</td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px dashed #e0f2fe;">
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₈
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">10.0°</td>
+                                                    <td style="padding: 4px 2px;">12.5°</td>
+                                                    <td style="padding: 4px 2px;">15.2°</td>
+                                                </tr>
+                                                <tr style="border-bottom: 1px dashed #e0f2fe;">
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₉
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">5.5°</td>
+                                                    <td style="padding: 4px 2px;">6.2°</td>
+                                                    <td style="padding: 4px 2px;">7.8°</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 4px 2px; font-weight: bold; color: #0369a1;">θ₁₀
+                                                    </td>
+                                                    <td style="padding: 4px 2px;">18.7°</td>
+                                                    <td style="padding: 4px 2px;">19.5°</td>
+                                                    <td style="padding: 4px 2px;">20.1°</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="f4-arrow-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </div>
+
+                            <!-- Core Algorithms -->
+                            <div class="f4-block process" style="flex: 2.5; padding: 15px;">
+                                <div
+                                    style="font-weight: 700; color: #5b21b6; margin-bottom: 20px; text-align: center; font-size: 18px;">
+                                    姿态重建网络：具体手部图结构与多模态映射 (14节点系统)
+                                </div>
+
+                                <svg width="100%" height="400" viewBox="0 0 800 400"
+                                    style="background:#ffffff; border-radius:8px; border:1px solid #e2e8f0; font-family: 'Inter', 'Noto Sans SC', sans-serif;">
+                                    <defs>
+                                        <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4"
+                                            markerHeight="4" orient="auto">
+                                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6" />
+                                        </marker>
+                                        <marker id="arrow-pink" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4"
+                                            markerHeight="4" orient="auto">
+                                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#ec4899" />
+                                        </marker>
+                                        <marker id="arrow-transform" viewBox="0 0 10 10" refX="8" refY="5"
+                                            markerWidth="6" markerHeight="6" orient="auto">
+                                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6" />
+                                        </marker>
+                                    </defs>
+
+                                    <!-- ============ LEFT HAND (VIRTUAL JOINTS) ============ -->
+                                    <!-- Base Root (Invisible but edges start from here) -->
+                                    <!-- Thumb -->
+                                    <line x1="200" y1="360" x2="140" y2="288" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <line x1="140" y1="288" x2="92" y2="252" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <!-- Index -->
+                                    <line x1="200" y1="360" x2="158" y2="216" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <line x1="158" y1="216" x2="146" y2="156" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <line x1="146" y1="156" x2="140" y2="96" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <!-- Middle -->
+                                    <line x1="200" y1="360" x2="200" y2="204" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <line x1="200" y1="204" x2="200" y2="132" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <line x1="200" y1="132" x2="200" y2="60" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <!-- Ring -->
+                                    <line x1="200" y1="360" x2="242" y2="216" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <line x1="242" y1="216" x2="254" y2="156" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <line x1="254" y1="156" x2="260" y2="96" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <!-- Pinky -->
+                                    <line x1="200" y1="360" x2="278" y2="240" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <line x1="278" y1="240" x2="302" y2="192" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+                                    <line x1="302" y1="192" x2="320" y2="144" stroke="#3b82f6" stroke-width="4"
+                                        marker-end="url(#arrow-blue)" />
+
+                                    <!-- 14 Nodes Left -->
+                                    <g fill="#eff6ff" stroke="#2563eb" stroke-width="3">
+                                        <circle cx="140" cy="288" r="16" />
+                                        <circle cx="92" cy="252" r="16" />
+                                        <circle cx="158" cy="216" r="16" />
+                                        <circle cx="146" cy="156" r="16" />
+                                        <circle cx="140" cy="96" r="16" />
+                                        <circle cx="200" cy="204" r="16" />
+                                        <circle cx="200" cy="132" r="16" />
+                                        <circle cx="200" cy="60" r="16" />
+                                        <circle cx="242" cy="216" r="16" />
+                                        <circle cx="254" cy="156" r="16" />
+                                        <circle cx="260" cy="96" r="16" />
+                                        <circle cx="278" cy="240" r="16" />
+                                        <circle cx="302" cy="192" r="16" />
+                                        <circle cx="320" cy="144" r="16" />
+                                    </g>
+                                    <g fill="#1e3a8a" font-size="16" font-weight="700" text-anchor="middle"
+                                        dominant-baseline="central">
+                                        <text x="140" y="288">1</text> <text x="92" y="252">2</text>
+                                        <text x="158" y="216">3</text> <text x="146" y="156">4</text> <text x="140"
+                                            y="96">5</text>
+                                        <text x="200" y="204">6</text> <text x="200" y="132">7</text> <text x="200"
+                                            y="60">8</text>
+                                        <text x="242" y="216">9</text> <text x="254" y="156">10</text> <text x="260"
+                                            y="96">11</text>
+                                        <text x="278" y="240">12</text> <text x="302" y="192">13</text> <text x="320"
+                                            y="144">14</text>
+                                    </g>
+
+                                    <text x="200" y="30" font-size="20" fill="#1e40af" text-anchor="middle"
+                                        font-weight="700">14节点 运动学骨架 (J)</text>
+                                    <text x="200" y="390" font-size="16" fill="#3b82f6" text-anchor="middle"
+                                        font-weight="600">关联动力学边 (FK)</text>
+
+
+                                    <!-- ============ RIGHT HAND (SENSORY NODES) ============ -->
+                                    <!-- Base Root -->
+                                    <!-- Thumb -->
+                                    <line x1="600" y1="360" x2="540" y2="288" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <line x1="540" y1="288" x2="492" y2="252" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <!-- Index -->
+                                    <line x1="600" y1="360" x2="558" y2="216" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <line x1="558" y1="216" x2="546" y2="156" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <line x1="546" y1="156" x2="540" y2="96" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <!-- Middle -->
+                                    <line x1="600" y1="360" x2="600" y2="204" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <line x1="600" y1="204" x2="600" y2="132" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <line x1="600" y1="132" x2="600" y2="60" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <!-- Ring -->
+                                    <line x1="600" y1="360" x2="642" y2="216" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <line x1="642" y1="216" x2="654" y2="156" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <line x1="654" y1="156" x2="660" y2="96" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <!-- Pinky -->
+                                    <line x1="600" y1="360" x2="678" y2="240" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <line x1="678" y1="240" x2="702" y2="192" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+                                    <line x1="702" y1="192" x2="720" y2="144" stroke="#ec4899" stroke-width="4"
+                                        marker-end="url(#arrow-pink)" />
+
+                                    <!-- 14 Nodes Right -->
+                                    <g fill="#fdf2f8" stroke="#db2777" stroke-width="3">
+                                        <circle cx="540" cy="288" r="16" />
+                                        <circle cx="492" cy="252" r="16" />
+                                        <circle cx="558" cy="216" r="16" />
+                                        <circle cx="546" cy="156" r="16" />
+                                        <circle cx="540" cy="96" r="16" />
+                                        <circle cx="600" cy="204" r="16" />
+                                        <circle cx="600" cy="132" r="16" />
+                                        <circle cx="600" cy="60" r="16" />
+                                        <circle cx="642" cy="216" r="16" />
+                                        <circle cx="654" cy="156" r="16" />
+                                        <circle cx="660" cy="96" r="16" />
+                                        <circle cx="678" cy="240" r="16" />
+                                        <circle cx="702" cy="192" r="16" />
+                                        <circle cx="720" cy="144" r="16" />
+                                    </g>
+                                    <g fill="#9d174d" font-size="16" font-weight="700" text-anchor="middle"
+                                        dominant-baseline="central">
+                                        <text x="540" y="288">1</text> <text x="492" y="252">2</text>
+                                        <text x="558" y="216">3</text> <text x="546" y="156">4</text> <text x="540"
+                                            y="96">5</text>
+                                        <text x="600" y="204">6</text> <text x="600" y="132">7</text> <text x="600"
+                                            y="60">8</text>
+                                        <text x="642" y="216">9</text> <text x="654" y="156">10</text> <text x="660"
+                                            y="96">11</text>
+                                        <text x="678" y="240">12</text> <text x="702" y="192">13</text> <text x="720"
+                                            y="144">14</text>
+                                    </g>
+
+                                    <text x="600" y="30" font-size="20" fill="#be185d" text-anchor="middle"
+                                        font-weight="700">14节点 拓扑传感网络 (S)</text>
+                                    <text x="600" y="390" font-size="16" fill="#ec4899" text-anchor="middle"
+                                        font-weight="600">关联拓扑连接边</text>
+
+
+                                    <!-- ============ TRANSFORMATION MAPPING ============ -->
+                                    <line x1="330" y1="120" x2="470" y2="120" stroke="#8b5cf6" stroke-width="4"
+                                        stroke-dasharray="8,6" marker-end="url(#arrow-transform)" />
+                                    <text x="400" y="105" font-size="18" fill="#7c3aed" text-anchor="middle"
+                                        font-weight="700">变换矩阵边 T()</text>
+
+                                    <line x1="330" y1="200" x2="470" y2="200" stroke="#8b5cf6" stroke-width="4"
+                                        stroke-dasharray="8,6" marker-end="url(#arrow-transform)" />
+                                    <text x="400" y="185" font-size="16" fill="#7c3aed" text-anchor="middle"
+                                        font-weight="600">空间位姿映射</text>
+
+                                    <line x1="330" y1="280" x2="470" y2="280" stroke="#8b5cf6" stroke-width="4"
+                                        stroke-dasharray="8,6" marker-end="url(#arrow-transform)" />
+                                    <text x="400" y="265" font-size="16" fill="#5b21b6" text-anchor="middle"
+                                        font-weight="700">J_i → S_i</text>
+
+                                </svg>
+                            </div>
+
+                            <!-- We remove the final output block to keep the 4-column visual flow as described: Raw -> Angles -> Skeleton -> Sensor Skeleton -->
+                        </div>
+                    </div>
+
+                    <!-- Bottom Timeline -->
+                    <div class="f4-section" style="padding-bottom: 120px;">
+                        <div class="f4-sec-header">
+                            <h3 class="f4-sec-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                评估验证：10秒长程连贯按摩动作重建 (图4.b)
+                            </h3>
+                            <div class="f4-sec-desc" style="margin-left: auto;">论证模型从连续手势流中还原物理交互全貌的能力。</div>
+                        </div>
+
+                        <div class="f4-timeline-wrapper">
+                            <div class="f4-track">
+                                <div class="f4-nodes">
+                                    <div class="f4-node">
+                                        <div class="f4-node-content">
+                                            <div class="f4-time-tag">t = 0.0s</div>
+                                            <div class="f4-time-desc">按摩初始准备接触</div>
+                                            <div class="f4-time-img-ph">三维追踪快照 1</div>
+                                        </div>
+                                    </div>
+                                    <div class="f4-node">
+                                        <div class="f4-node-content">
+                                            <div class="f4-time-tag">t = 3.2s</div>
+                                            <div class="f4-time-desc">垂直渐增力按压</div>
+                                            <div class="f4-time-img-ph">三维追踪快照 2</div>
+                                        </div>
+                                    </div>
+                                    <div class="f4-node">
+                                        <div class="f4-node-content">
+                                            <div class="f4-time-tag">t = 7.5s</div>
+                                            <div class="f4-time-desc">维持接触进行轨迹折返</div>
+                                            <div class="f4-time-img-ph">三维追踪快照 3</div>
+                                        </div>
+                                    </div>
+                                    <div class="f4-node">
+                                        <div class="f4-node-content">
+                                            <div class="f4-time-tag">t = 10.0s</div>
+                                            <div class="f4-time-desc">单次柔性指法结束离手</div>
+                                            <div class="f4-time-img-ph">三维追踪快照 4</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Tactile Annotation Paradigm -->
+        <div class="slide">
+            <div class="card">
+                <h2>图5 核心理念：触觉自动化标注策略</h2>
+                <div class="highlight-box" style="margin-top:0;">
+                    将人类灵巧操作中的“暗知识”（如施力部位、力度变化、接触方向），转化为 VLA 模型易于理解的细粒度、过程性语义描述。
+                </div>
+
+                <div class="framework-diagram">
+                    <style>
+                        .framework-diagram {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0;
+                            margin: 15px 0 25px 0;
+                            position: relative;
+                        }
+
+                        .fw-row {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: stretch;
+                            gap: 15px;
+                            width: 100%;
+                        }
+
+                        .fw-box {
+                            background: rgba(255, 255, 255, 0.8);
+                            border: 1px solid rgba(0, 0, 0, 0.05);
+                            border-radius: 12px;
+                            padding: 15px;
+                            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+                            flex: 1;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            position: relative;
+                            z-index: 2;
+                        }
+
+                        .fw-title {
+                            font-weight: 700;
+                            font-size: 1rem;
+                            margin-bottom: 8px;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                        }
+
+                        .fw-desc {
+                            font-size: 1rem;
+                            color: var(--text-sub);
+                            line-height: 1.5;
+                            margin: 0;
+                        }
+
+                        .fw-vision {
+                            border-top: 4px solid #0ea5e9;
+                            flex: 1;
+                        }
+
+                        .fw-vision .fw-title {
+                            color: #0284c7;
+                        }
+
+                        .fw-plan {
+                            border-top: 4px solid #10b981;
+                            background: linear-gradient(to right, rgba(236, 253, 245, 0.7), rgba(255, 255, 255, 0.9));
+                            flex: 1.4;
+                        }
+
+                        .fw-plan .fw-title {
+                            color: #059669;
+                        }
+
+                        .fw-signal {
+                            border-top: 4px solid #f59e0b;
+                            flex: 1;
+                        }
+
+                        .fw-signal .fw-title {
+                            color: #d97706;
+                        }
+
+                        .fw-pipeline {
+                            border-top: 4px solid #8b5cf6;
+                            background: linear-gradient(to right, rgba(245, 243, 255, 0.7), rgba(255, 255, 255, 0.9));
+                            flex: 1.4;
+                        }
+
+                        .fw-pipeline .fw-title {
+                            color: #6d28d9;
+                        }
+
+                        .fw-token-grid {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            gap: 8px;
+                            margin-top: 10px;
+                        }
+
+                        .fw-token {
+                            background: rgba(139, 92, 246, 0.08);
+                            border: 1px solid rgba(139, 92, 246, 0.2);
+                            border-radius: 6px;
+                            padding: 6px 10px;
+                            font-size: 0.95rem;
+                            color: var(--text-sub);
+                            text-align: center;
+                        }
+
+                        .fw-arrow-h {
+                            width: 30px;
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .fw-arrow-h::before {
+                            content: '';
+                            position: absolute;
+                            left: 0;
+                            width: 100%;
+                            height: 2px;
+                            background: rgba(15, 23, 42, 0.25);
+                        }
+
+                        .fw-arrow-h::after {
+                            content: '';
+                            position: absolute;
+                            right: -2px;
+                            border-top: 6px solid transparent;
+                            border-bottom: 6px solid transparent;
+                            border-left: 6px solid rgba(15, 23, 42, 0.35);
+                        }
+
+                        .fw-arrow-v {
+                            width: 12px;
+                            height: 100%;
+                            position: relative;
+                        }
+
+                        .fw-arrow-v::before {
+                            content: '';
+                            position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: 0;
+                            width: 2px;
+                            height: 100%;
+                            background: rgba(15, 23, 42, 0.25);
+                        }
+
+                        .fw-arrow-v.up::after {
+                            content: '';
+                            position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: -4px;
+                            border-left: 6px solid transparent;
+                            border-right: 6px solid transparent;
+                            border-bottom: 6px solid rgba(15, 23, 42, 0.35);
+                        }
+
+                        .fw-steps {
+                            display: flex;
+                            gap: 8px;
+                            margin-bottom: 8px;
+                        }
+
+                        .fw-step-badge {
+                            background: var(--primary);
+                            color: white;
+                            font-size: 0.85rem;
+                            padding: 3px 8px;
+                            border-radius: 10px;
+                            font-weight: 600;
+                        }
+
+                        .fw-hl {
+                            color: var(--primary);
+                            font-weight: 700;
+                        }
+                    </style>
+
+                    <!-- Top Level -->
+                    <div class="fw-row">
+                        <div class="fw-box fw-vision">
+                            <div class="fw-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                                    <path d="M2 12h20" />
+                                </svg>
+                                1. 视觉主导计划
+                            </div>
+                            <div class="fw-desc">
+                                根据VLA模型顶层需求（如执行按摩），输出粗颗粒度的空间位移框架。<br>
+                                <em>指令示例：["靠近目标", "向下按压"]</em>
+                            </div>
+                        </div>
+
+                        <div class="fw-arrow-h"></div>
+
+                        <div class="fw-box fw-plan">
+                            <div class="fw-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                    <polyline points="22 4 12 14.01 9 11.01" />
+                                </svg>
+                                2. 触觉主导的过程性计划 (缝隙弥合)
+                            </div>
+                            <div class="fw-desc" style="margin-top: 5px;">
+                                在单纯的空间位移框架上注入过程性物理约束，形成完整的执行语义。例：
+                                <div
+                                    style="background: rgba(255,255,255,0.7); padding: 8px 10px; border-radius: 6px; margin-top: 8px; border: 1px dashed rgba(16, 185, 129, 0.4); font-size: 0.95rem;">
+                                    以 <span class="fw-hl">[掌根]</span> 施加 <span class="fw-hl">[法向垂直]</span> 且 <span
+                                        class="fw-hl">[力度渐增]</span> 的中力，<span class="fw-hl">[持续保持]</span> 地
+                                    <strong>【向下按压】</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Connector -->
+                    <div style="height: 25px; position: relative;">
+                        <!-- Position roughly under the center of the right side blocks -->
+                        <div class="fw-arrow-v up" style="position: absolute; right: 28%; height: 25px;"></div>
+
+                        <div
+                            style="position: absolute; right: 31%; top: 2px; font-size: 0.9rem; color: var(--text-sub); font-weight: 600;">
+                            语义增强</div>
+                    </div>
+
+                    <!-- Bottom Level -->
+                    <div class="fw-row">
+                        <div class="fw-box fw-signal">
+                            <div class="fw-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M2 12h4l3-9 5 18 3-9h5" />
+                                </svg>
+                                物理多模态信号
+                            </div>
+                            <div class="fw-desc">
+                                系统在真实物理交互采集的三维力、摩擦电、应变阵列时序流数据。
+                            </div>
+                        </div>
+
+                        <div class="fw-arrow-h"></div>
+
+                        <div class="fw-box fw-pipeline">
+                            <div class="fw-steps">
+                                <span class="fw-step-badge">1. 信号切分</span>
+                                <span class="fw-step-badge">2. 特征分类</span>
+                                <span class="fw-step-badge">3. 语义拼装</span>
+                            </div>
+                            <div class="fw-title" style="margin-bottom: 4px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                    <line x1="16" y1="17" x2="8" y2="17" />
+                                    <polyline points="10 9 9 9 8 9" />
+                                </svg>
+                                物理过程词元抽象
+                            </div>
+                            <div class="fw-token-grid">
+                                <div class="fw-token"><strong>力度:</strong> 轻/中/重力, 渐增/减</div>
+                                <div class="fw-token"><strong>轨迹:</strong> 法向/平行/斜向, 折返</div>
+                                <div class="fw-token"><strong>接触:</strong> 指尖/掌心, 局部/面</div>
+                                <div class="fw-token"><strong>时序:</strong> 瞬发/持续, 高/低频</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>5.1 触觉增强的动作计划生成机制</h3>
+                <ul>
+                    <li><strong>阶段一：视觉主导的整体性计划</strong><br>
+                        宏观指令拆解。以“执行颈部按摩”为例，依靠视觉将技能分解为位移框架（如“靠近”、“向下按”）。</li>
+                    <li><strong>阶段二：触觉主导的过程性计划 (补全缝隙)</strong><br>
+                        在空间框架基础上引入“触觉词元”。为位移步骤注入过程物理约束，例如为单纯的“按”补充上“由轻到重地”，为底层执行机构提供执行级参考。</li>
+                </ul>
+
+                <br>
+                <div style="width: 100%; border-top: 1px dashed rgba(0,0,0,0.1); margin: 20px 0;"></div>
+
+                <h3>5.2 面向过程性描述的触觉词元解码机制</h3>
+                <p>摒弃“特定传感器分类逻辑”，从回答发力本质的<strong>“过程性副词”</strong>切入，基于物理可观测量实现降维抽象。四维度正交分解：</p>
+
+                <div class="grid-4" style="margin-top: 20px;">
+                    <div class="feature-card">
+                        <h4>1. 力度与发力趋势</h4>
+                        <p><em>“轻轻地” / “由轻到重地”</em></p>
+                        <p style="font-size:1rem"><strong>物理量：</strong>绝对幅值、幅值时间导数。</p>
+                        <p style="font-size:1rem"><strong>词元池：</strong>{轻/中/重力}, {渐增/平稳/渐减}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>2. 运动与发力轨迹</h4>
+                        <p><em>“垂直向下” / “轨迹折返”</em></p>
+                        <p style="font-size:1rem"><strong>物理量：</strong>法向切向夹角及其时间导数。</p>
+                        <p style="font-size:1rem"><strong>词元池：</strong>{法向/平行/斜向}, {恒定/偏转/折返}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>3. 接触姿态与空间</h4>
+                        <p><em>“掌根主导” / “全手包裹”</em></p>
+                        <p style="font-size:1rem"><strong>物理量：</strong>受力重心坐标、有效接触面积。</p>
+                        <p style="font-size:1rem"><strong>词元池：</strong>{指尖/指腹/掌根...}, {点状/局部面/包裹}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>4. 时序与动作节奏</h4>
+                        <p><em>“快速短触” / “高频脉冲”</em></p>
+                        <p style="font-size:1rem"><strong>物理量：</strong>动作边缘时长、物理脉冲频率。</p>
+                        <p style="font-size:1rem"><strong>词元池：</strong>{单次/持续/往复}, {高频短/低频长}</p>
+                    </div>
+                </div>
+
+                <br>
+                <div style="width: 100%; border-top: 1px dashed rgba(0,0,0,0.1); margin: 20px 0;"></div>
+
+                <h3>5.3 自动化的触觉打标流水线与应用</h3>
+                <p>三阶段初探工作流，处理复杂的实验长流数据，实现过程性语义的批量增强生成：</p>
+
+                <ol style="margin-bottom: 20px; font-size: 1.2rem;">
+                    <li><strong>信号分割 (Temporal Segmentation):</strong> 探究摩擦电等信号特征峰值，将连续行为流切分为独立的基础动作段落。</li>
+                    <li><strong>特征分类 (Token Classification):</strong> 特征阈值与轻量级判断模型融合，确定每一时段的具体物理词元集。</li>
+                    <li><strong>语义重构 (Semantic Generation):</strong> 基于语言学模板拼装。“视觉粗糙标签”转为：“以
+                        <strong>[掌根][局部面接触]</strong> 的形态，施加 <strong>[法向垂直][方向恒定]</strong> 且 <strong>[力度渐增]</strong> 的
+                        <strong>[中等力]</strong>，并且 <strong>[持续保持]</strong> 地 <strong>[按压]</strong>”。
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 7 Content merged to Slide 6 -->
+
+        <!-- Slide 7 (Previously Slide 8): Case Study -->
+        <div class="slide">
+            <div class="card">
+                <h2>图6：自动标签与控制应用案例展示</h2>
+                <p>在建立上述触觉流水线之后，我们能批量从长序列交互中还原含有深层物理内涵的结构化记录。</p>
+
+                <div class="fig6-diagram" style="margin-top: 30px;">
+                    <style>
+                        .fig6-diagram {
+                            background: #ffffff;
+                            border-radius: 12px;
+                            padding: 30px;
+                            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+                            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+                            position: relative;
+                            overflow: hidden;
+                            border: 1px solid rgba(0, 0, 0, 0.05);
+                        }
+
+                        .f6-row {
+                            display: flex;
+                            gap: 15px;
+                            position: relative;
+                            z-index: 2;
+                        }
+
+                        .f6-label-blue {
+                            background: #f0f9ff;
+                            color: #0284c7;
+                            font-weight: 600;
+                            font-size: 1rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            text-align: center;
+                            padding: 10px;
+                            border-radius: 6px;
+                        }
+
+                        .f6-label-vertical {
+                            writing-mode: vertical-lr;
+                            text-orientation: upright;
+                            letter-spacing: 4px;
+                            padding: 20px 10px;
+                        }
+
+                        .f6-box-orange {
+                            background: #fff8f1;
+                            color: #9a3412;
+                            font-size: 1rem;
+                            font-weight: 500;
+                            padding: 12px 15px;
+                            border-radius: 6px;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .f6-macro-grid {
+                            display: grid;
+                            grid-template-columns: repeat(4, 1fr);
+                            gap: 15px;
+                            flex: 1;
+                        }
+
+                        .f6-macro-box {
+                            background: #fff8f1;
+                            color: #9a3412;
+                            font-weight: 500;
+                            font-size: 0.95rem;
+                            text-align: center;
+                            padding: 10px 5px;
+                            border-radius: 6px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .f6-faded {
+                            background: linear-gradient(to right, #fff8f1, rgba(255, 248, 241, 0.2));
+                            color: rgba(154, 52, 18, 0.5);
+                            border: none;
+                        }
+                    </style>
+
+                    <!-- Instruction -->
+                    <div class="f6-row" style="margin-bottom: 25px;">
+                        <div class="f6-label-blue" style="width: 100px;">Instruction</div>
+                        <div class="f6-box-orange" style="flex: 1; justify-content: flex-start;">
+                            因为长期办公，我感到颈部酸痛，请你根据我每日肌肉的僵硬程度灵活调整按摩时长与力度，缓解疲劳
+                        </div>
+                    </div>
+
+                    <!-- Skill Generation Section -->
+                    <div class="f6-row" style="align-items: stretch;">
+                        <div class="f6-label-blue f6-label-vertical"
+                            style="width: 30px; padding-left: 15px; padding-right: 15px;">
+                            按摩方案生成<br><br><span
+                                style="writing-mode: horizontal-tb; letter-spacing: 0; font-size: 0.95rem; margin-top: 10px;">Skill</span>
+                        </div>
+
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+
+                            <!-- Vision Plan -->
+                            <div style="display: flex; gap: 15px;">
+                                <div class="f6-label-blue" style="width: 140px; font-size: 1rem;">视觉主导的<br>整体性动作计划</div>
+                                <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+
+                                    <!-- Sequence Level -->
+                                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                                        <div class="f6-macro-box"
+                                            style="background: #e0f2fe; color: #0369a1; font-weight: 600; padding: 12px; border: 2px solid #bae6fd;">
+                                            ① 揉法 (5次)</div>
+                                        <div class="f6-macro-box"
+                                            style="background: #f8fafc; color: #64748b; padding: 12px; border: 1px dashed #cbd5e1;">
+                                            ② 按法 (5次)</div>
+                                        <div class="f6-macro-box"
+                                            style="background: #f8fafc; color: #64748b; padding: 12px; border: 1px dashed #cbd5e1;">
+                                            ③ 推法 (10次)</div>
+                                    </div>
+
+                                    <!-- Expansion Arrows from 揉法 branching to the step level -->
+                                    <div style="height: 35px; position: relative; width: 100%;">
+                                        <svg width="100%" height="100%" viewBox="0 0 1000 35" preserveAspectRatio="none"
+                                            style="position: absolute; top:0; left:0; overflow: visible;">
+                                            <path d="M 20 35 Q 20 17.5 93 17.5 T 166 0 Q 166 17.5 573 17.5 T 980 35"
+                                                fill="none" stroke="#9ca3af" stroke-width="2"
+                                                vector-effect="non-scaling-stroke" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- Step Level Sub-routine -->
+                                    <div class="f6-macro-grid" style="align-items: stretch;">
+                                        <div class="f6-macro-box"
+                                            style="background: white; border: 2px solid #e2e8f0; font-size: 0.95rem;">
+                                            靠近目标部位</div>
+                                        <div class="f6-macro-box"
+                                            style="border: 2px solid #93c5fd; background: #eff6ff; color: #1e3a8a; font-size: 0.95rem; font-weight: 600;">
+                                            向下按压</div>
+                                        <div class="f6-macro-box"
+                                            style="background: white; border: 2px solid #e2e8f0; font-size: 0.95rem;">
+                                            维持接触并移动</div>
+                                        <div class="f6-macro-box f6-faded" style="font-size: 0.95rem;">分离手臂</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SVG Connector Lines -->
+                            <div style="display: flex; gap: 15px; height: 35px;">
+                                <div style="width: 140px;"></div>
+                                <div style="flex: 1; position: relative;">
+                                    <svg width="100%" height="100%" viewBox="0 0 1000 35" preserveAspectRatio="none"
+                                        style="position: absolute; top:0; left:0; overflow: visible;">
+                                        <path d="M 20 35 Q 20 17.5 197.5 17.5 T 375 0 Q 375 17.5 677.5 17.5 T 980 35"
+                                            fill="none" stroke="#60a5fa" stroke-width="2"
+                                            vector-effect="non-scaling-stroke" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- Tactile Plan -->
+                            <div style="display: flex; gap: 15px; height: 80px;">
+                                <div class="f6-label-blue" style="width: 140px; font-size: 1rem;">触觉主导的<br>过程性动作计划</div>
+                                <div style="flex: 1; position: relative; display: flex;">
+                                    <div class="f6-box-orange"
+                                        style="width: 95%; height: 100%; box-sizing: border-box; justify-content: flex-start; z-index: 2; line-height: 1.6; padding: 10px 20px;">
+                                        <span style="font-size: 1.05rem;">以 <strong
+                                                style="color:#d97706; background: rgba(217,119,6,0.1); padding: 2px 4px; border-radius: 4px;">[掌根][局部面接触]</strong>
+                                            的形态，施加 <strong
+                                                style="color:#d97706; background: rgba(217,119,6,0.1); padding: 2px 4px; border-radius: 4px;">[法向垂直][方向恒定]</strong>
+                                            且 <strong
+                                                style="color:#d97706; background: rgba(217,119,6,0.1); padding: 2px 4px; border-radius: 4px;">[力度渐增]</strong>
+                                            的 <strong
+                                                style="color:#d97706; background: rgba(217,119,6,0.1); padding: 2px 4px; border-radius: 4px;">[中等力]</strong>，并且
+                                            <strong
+                                                style="color:#d97706; background: rgba(217,119,6,0.1); padding: 2px 4px; border-radius: 4px;">[持续保持]</strong>
+                                            地 <strong
+                                                style="color:#ef4444; font-size: 1.25rem; border-bottom: 2px solid #ef4444;">【按压】</strong></span>
+                                    </div>
+                                    <!-- Faded end -->
+                                    <div
+                                        style="position: absolute; right: 5%; top:0; height: 100%; width: 5%; background: linear-gradient(to right, rgba(255,248,241,0), #ffffff); z-index: 3;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Timeline -->
+        <div class="slide">
+            <div class="card">
+                <h2>后续工作推进与时间计划表</h2>
+
+                <div
+                    style="margin-top: 30px; margin-left: 20px; display: flex; flex-direction: column; gap: 20px; position: relative; padding-left: 40px; border-left: 4px solid rgba(109, 40, 217, 0.2);">
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #3b82f6;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #3b82f6; font-size: 1.2rem;">4月第一周 (4.1 -
+                            4.7)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">启动 Fig 1-3
+                            的论文主干写作（单器件数据已齐备）；同时开展手部姿态追踪与接触模型（Fig 4）的设计与实现。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #10b981;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #10b981; font-size: 1.2rem;">4月第二周 (4.8 -
+                            4.14)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">
+                            推进系统级验证环节，重点开展触觉过程性语义自动化标注策略（Fig 5）的设计与实现。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #eab308;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #eab308; font-size: 1.2rem;">4月第三周 (4.15 -
+                            4.21)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">完成验证实验；集中撰写涉及宏观算法（Fig 4 - Fig
+                            5）的 Results 段落，并推进 Method 部分内容的写作。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #f97316;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #f97316; font-size: 1.2rem;">4月第四周 (4.22 -
+                            4.28)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">完成 Introduction、Discussion 与
+                            Abstract，确定全文逻辑主线并组装主干内容。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #ec4899;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #ec4899; font-size: 1.2rem;">5月第一周 (4.29 -
+                            5.5)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">编制补充材料
+                            (SI)，包括实验细节、视频制作、图表检查与参考文献校对排版。</p>
+                    </div>
+
+                    <div
+                        style="position: relative; background: rgba(139, 92, 246, 0.05); padding: 15px 20px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.2); left: -20px; width: calc(100% + 20px);">
+                        <div
+                            style="position: absolute; left: -32px; top: 15px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #6d28d9; box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.1);">
+                        </div>
+                        <h3
+                            style="margin-top: 0; margin-bottom: 4px; color: #6d28d9; font-size: 1.3rem; font-weight: 800;">
+                            5月中旬 (5.6 - 5.15)</h3>
+                        <p style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #4c1d95;">正式完成论文初稿 (First
+                            Draft)，提交团队内部审阅，开始收集意见并进入多轮打磨阶段。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #ef4444;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #ef4444; font-size: 1.2rem;">5月底 - 6月上旬
+                            (最终定稿与投稿)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">完成各方修改意见的整合与终稿排版，正式提交手稿。<br />
+                            <strong style="color: #b91c1c; font-size: 1.1rem;">目标期刊：</strong>
+                            <strong>FlexMat</strong>、<strong>npj Flexible
+                                Electronics</strong>、<strong>Advanced Science</strong>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div> <!-- .slider-container -->
+
+    <div class="controls">
+        <button class="btn-nav" id="btn-prev">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 18l-6-6 6-6" />
+            </svg>
+        </button>
+        <div class="progress"><span id="curr-slide">1</span> / <span id="total-slide">10</span></div>
+        <button class="btn-nav" id="btn-next">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6" />
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const currSlideEl = document.getElementById('curr-slide');
+            document.getElementById('total-slide').textContent = totalSlides;
+
+            let currentIndex = 0;
+
+            function updateSlides() {
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active', 'prev');
+                    if (index === currentIndex) {
+                        slide.classList.add('active');
+                    } else if (index < currentIndex) {
+                        slide.classList.add('prev');
+                    }
+                });
+                currSlideEl.textContent = currentIndex + 1;
+            }
+
+            function goNext() {
+                if (currentIndex < totalSlides - 1) {
+                    currentIndex++;
+                    updateSlides();
+                }
+            }
+
+            function goPrev() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateSlides();
+                }
+            }
+
+            btnNext.addEventListener('click', goNext);
+            btnPrev.addEventListener('click', goPrev);
+
+            // Keyboard navigation
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'Enter') {
+                    goNext();
+                } else if (e.key === 'ArrowLeft') {
+                    goPrev();
+                }
+            });
+
+            // Wheel navigation has been removed as per user request to prevent scrolling conflicts.
+            // You can still navigate using arrow keys, space, enter, or the bottom UI buttons.
+
+            // Initial render
+            updateSlides();
+        });
+    </script>
+</body>
+
+</html>

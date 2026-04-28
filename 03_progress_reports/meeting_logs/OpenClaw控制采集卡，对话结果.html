@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw 对话记录 - 采集卡配置</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --sidebar-bg: rgba(255, 255, 255, 0.7);
+            --user-bubble: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --user-text: #ffffff;
+            --agent-bubble: #ffffff;
+            --agent-text: #1e293b;
+            --system-text: #94a3b8;
+            --accent-color: #6366f1;
+            --border-radius: 20px;
+            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--agent-text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        aside {
+            width: 280px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            z-index: 10;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: var(--user-bubble);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .meta-item {
+            font-size: 0.8125rem;
+            color: var(--system-text);
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .meta-label {
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 3rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1.5rem 1.75rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--user-bubble);
+            color: var(--user-text);
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.agent {
+            align-self: flex-start;
+            background: var(--agent-bubble);
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .message.system {
+            align-self: center;
+            max-width: 90%;
+            background: rgba(226, 232, 240, 0.3);
+            box-shadow: none;
+            color: var(--system-text);
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .message:hover {
+            transform: scale(1.01);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Content Styling */
+        .content pre {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 1.25rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+        }
+
+        .content table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            margin: 1rem 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .content th {
+            background: #f8fafc;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .content td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .content tr:last-child td {
+            border-bottom: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message {
+            animation: fadeIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        /* Custom Table for ASCII charts */
+        .ascii-table {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: pre;
+            overflow-x: auto;
+            font-size: 0.75rem;
+            margin: 1rem -0.5rem;
+            border: 1px solid #1e293b;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+            border: 2px solid var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+    <aside>
+        <div class="logo">OpenClaw</div>
+        <div class="meta-info" id="sidebar-meta">
+            <div class="meta-item">
+                <span class="meta-label">Session Name</span>
+                minimax_final
+            </div>
+        </div>
+    </aside>
+
+    <main id="chat-main">
+        <div class="chat-container" id="chat-container"></div>
+    </main>
+
+    <script id="md-content" type="text/markdown">
+openclaw tui - ws://127.0.0.1:18789 - agent main - session minimax_final                                                                                                                                                  
+
+ session agent:main:minimax_final                                                                                                                                                                                          
+
+
+ 你好                                                                                                                                                                                                                      
+
+
+ 你好！👋我注意到这是一个全新的工作空间 —— 有个 BOOTSTRAP.md 文件在等着我。看来我刚上线，还没有记忆。你是谁不重要，重要的是 —— 你是第一个跟我说话的人。😊你想聊聊天，还是有什么我可以帮忙的？                                                                                                                                                                                      
+
+
+
+
+ 开始采集                                                                                                                                                                                                                  
+
+
+ 让我用后台模式运行：采集已经在后台启动了！✅ 数据将写入 ./data/capture.csv，采样率 100Hz，持续获取 CH1、CH2 通道的电压数据。要停止采集时告诉我 "停止采集"。                                                                                                                                             
+
+
+ 尝试读取一些最新的数据                                                                                                                                                                                                    
+
+
+ 📊 实时采集数据（最新 15 条）：                                                                                                                                                                                           
+
+ ┌─────────────────────────┬───────┬───────┐                                                                                                                                                                               
+ │ Time                    │ CH1   │ CH2   │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.848 │ 2.08  │ 3.682 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.838 │ 2.232 │ 3.612 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.828 │ 2.116 │ 3.681 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.817 │ 2.132 │ 3.574 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.807 │ 2.022 │ 3.579 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.797 │ 2.027 │ 3.576 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.787 │ 1.873 │ 3.56  │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.777 │ 2.28  │ 3.457 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.767 │ 1.871 │ 3.422 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.757 │ 2.031 │ 3.436 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.747 │ 1.985 │ 3.374 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.736 │ 1.83  │ 3.347 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.726 │ 1.924 │ 3.428 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.716 │ 1.927 │ 3.325 │                                                                                                                                                                               
+ ├─────────────────────────┼───────┼───────┤                                                                                                                                                                               
+ │ 2026-04-04 22:13:16.706 │ 1.959 │ 3.238 │                                                                                                                                                                               
+ └─────────────────────────┴───────┴───────┘                                                                                                                                                                               
+
+ 采集正在运行中，采样率约 100Hz。CH1 围绕 2.5V 正弦波动，CH2 围绕 3.3V 余弦波动。                                                                                                                                          
+
+
+ 停止采集                                                                                                                                                                                                                  
+
+
+ 采集已停止！✅                                                                                                                                                                                                            
+
+ 共采集 25,283 条数据记录（耗时约 4 分 13 秒）。                                                                                                                                                                           
+
+ 数据文件保存在 ./data/capture.csv，要再次采集或查看数据随时告诉我。                                                                                                                                                       
+ connected | idle                                                                                                                                                                                                          
+ agent main | session minimax_final (openclaw-tui) | siliconflow/Pro/MiniMaxAI/MiniMax-M2.5 | tokens 22k/32k (68%)                                                                                                         
+    </script>
+
+    <script>
+        function parseTUI(text) {
+            const lines = text.split('\n');
+            const messages = [];
+            let currentSender = 'agent';
+            let currentMessageLines = [];
+
+            const isUserLine = (l) => {
+                const u = l.trim();
+                return ['你好', '开始采集', '停止采集', '尝试读取一些最新的数据'].includes(u);
+            };
+
+            const isSystemLine = (l) => {
+                return l.includes('openclaw tui') ||
+                    l.includes('session agent') ||
+                    l.includes('Pre-compaction memory flush') ||
+                    l.includes('NO_REPLY') ||
+                    l.includes('connected |') ||
+                    l.includes('agent main |');
+            };
+
+            lines.forEach((line, i) => {
+                const trimmed = line.trim();
+
+                if (isSystemLine(line)) {
+                    if (currentMessageLines.length) {
+                        messages.push({ sender: currentSender, content: currentMessageLines.join('\n') });
+                        currentMessageLines = [];
+                    }
+                    messages.push({ sender: 'system', content: trimmed });
+                    return;
+                }
+
+                if (isUserLine(line)) {
+                    if (currentMessageLines.length) {
+                        messages.push({ sender: currentSender, content: currentMessageLines.join('\n') });
+                        currentMessageLines = [];
+                    }
+                    messages.push({ sender: 'user', content: trimmed });
+                    currentSender = 'agent';
+                    return;
+                }
+
+                if (trimmed || line === '') {
+                    currentMessageLines.push(line);
+                }
+            });
+
+            if (currentMessageLines.length) {
+                messages.push({ sender: currentSender, content: currentMessageLines.join('\n') });
+            }
+
+            return messages;
+        }
+
+        function render() {
+            const container = document.getElementById('chat-container');
+            const text = document.getElementById('md-content').textContent;
+
+            const messages = parseTUI(text);
+            messages.forEach((msg, idx) => {
+                const content = msg.content.trim();
+                if (!content) return;
+
+                const div = document.createElement('div');
+                div.className = `message ${msg.sender}`;
+                div.style.animationDelay = `${idx * 0.1}s`;
+
+                if (msg.sender === 'system') {
+                    div.textContent = content;
+                    if (content.includes('agent main |')) {
+                        updateSidebar(content);
+                    }
+                } else {
+                    if (content.includes('┌') || content.includes('├') || content.includes('│')) {
+                        const parts = content.split(/(┌[\s\S]+?┘)/);
+                        div.innerHTML = parts.map(p => {
+                            if (p.includes('┌')) {
+                                return `<div class="ascii-table">${p.trim()}</div>`;
+                            }
+                            return `<div class="content">${marked.parse(p)}</div>`;
+                        }).join('');
+                    } else {
+                        div.innerHTML = `<div class="content">${marked.parse(content)}</div>`;
+                    }
+                }
+                container.appendChild(div);
+            });
+        }
+
+        function updateSidebar(text) {
+            const sidebar = document.getElementById('sidebar-meta');
+            const parts = text.split('|').map(p => p.trim());
+            sidebar.innerHTML = `
+                <div class="meta-item">
+                    <span class="meta-label">Session Name</span>
+                    minimax_final
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Status</span>
+                    ${parts[0] || 'Connected'}
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Model</span>
+                    ${parts[2] || 'MiniMax-M2.5'}
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Tokens</span>
+                    ${parts[3] || 'N/A'}
+                </div>
+            `;
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

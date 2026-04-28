@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苏格拉底式提问 - 手稿提问回应</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --text-main: #2d3748;
+            --text-light: #718096;
+            --accent-color: #3182ce;
+            --accent-hover: #2b6cb0;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            --danger-bg: #fff5f5;
+            --danger-text: #c53030;
+            --danger-border: #feb2b2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            overflow: hidden;
+        }
+
+        .ambient-blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.6;
+            border-radius: 50%;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(49, 130, 206, 0.15);
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            bottom: -20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: rgba(226, 232, 240, 0.8);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(5%, 10%) scale(1.05);
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s forwards ease-out;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #1a365d, #3182ce);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .subtitle {
+            display: inline-block;
+            background-color: var(--danger-bg);
+            color: var(--danger-text);
+            padding: 0.25rem 1rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+            border: 1px solid var(--danger-border);
+        }
+
+        .hero-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: left;
+        }
+
+        .hero-card p {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-card .conclusion {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-left: 4px solid var(--danger-text);
+            border-radius: 0 12px 12px 0;
+            font-weight: 500;
+            color: #4a5568;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Level Sections */
+        .level-section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .level-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .level-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 2rem;
+            z-index: 10;
+        }
+
+        .level-badge {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            box-shadow: 0 4px 10px rgba(49, 130, 206, 0.3);
+        }
+
+        .level-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        /* Q&A Cards */
+        .qa-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .qa-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            border-color: #cbd5e0;
+        }
+
+        .question {
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+            background: linear-gradient(to right, #ffffff, #fdfbfb);
+        }
+
+        .q-icon {
+            color: var(--accent-color);
+            font-weight: 900;
+            font-size: 1.25rem;
+            margin-right: 1rem;
+            margin-top: 0.1rem;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: rgba(49, 130, 206, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .q-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+            flex-grow: 1;
+            padding-right: 2rem;
+        }
+
+        .expand-icon {
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qa-card.active .expand-icon {
+            transform: translateY(-50%) rotate(180deg);
+            color: var(--accent-color);
+        }
+
+        .answer-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .answer {
+            padding: 0 1.5rem 1.5rem 4.5rem;
+            color: #4a5568;
+            font-size: 1.05rem;
+            border-top: 1px solid transparent;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+        }
+
+        .qa-card.active .answer {
+            opacity: 1;
+            transform: translateY(0);
+            border-top-color: #f0f4f8;
+            padding-top: 1.5rem;
+        }
+
+        .answer ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .answer li {
+            margin-bottom: 0.5rem;
+        }
+
+        .answer strong {
+            color: #2b6cb0;
+            font-weight: 600;
+        }
+
+        /* Final Question Styling */
+        .ultimate-card {
+            background: linear-gradient(135deg, #1a365d, #2a4365);
+            color: white;
+            border: none;
+            box-shadow: 0 20px 40px rgba(26, 54, 93, 0.3);
+        }
+
+        .ultimate-card .question {
+            background: transparent;
+            color: white;
+        }
+
+        .ultimate-card .q-icon {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .ultimate-card .q-text {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .ultimate-card .expand-icon {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .ultimate-card.active .expand-icon {
+            color: white;
+        }
+
+        .ultimate-card .answer {
+            color: #e2e8f0;
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .ultimate-card .answer strong {
+            color: #90cdf4;
+        }
+
+        ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        ol li {
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+        }
+
+        /* Note text */
+        .note-text {
+            font-style: italic;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ambient-bg">
+        <div class="ambient-blob blob-1"></div>
+        <div class="ambient-blob blob-2"></div>
+    </div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1>基于手稿内容的分层级提问回应</h1>
+            <span class="subtitle">苏格拉底式提问法</span>
+            <div class="hero-card">
+                <p>本文件的核心目的，是通过极度严苛的视角，剥离由于后续应用（如Fig 5标注）带来的价值光环，仅针对 <strong>Fig 4 自身主张的数据处理与结构创新</strong> 进行独立审视。</p>
+                <div class="conclusion">
+                    <strong>最终梳理出的明确结论是：</strong><br>
+                    Fig 4
+                    中对于“图结构化表示与节点挂载”的学术包装，在现有柔性电子以及计算机与机器人学的框架下，经不起严谨推敲，缺乏作为独立核心创新的立足点。<strong>事实上，这属于数据的预处理。</strong>
+                </div>
+            </div>
+        </header>
+
+        <!-- Level 1 -->
+        <section class="level-section">
+            <div class="level-header">
+                <div class="level-badge">1</div>
+                <h2 class="level-title">基础概念与本质定义的澄清提问</h2>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">文中定义的「手部感知图」，它的本质定义是什么？它和普通的“带硬件编号、带时间戳的传感器数据数组”，核心的、不可替代的区别到底在哪里？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <ul>
+                            <li><strong>本质定义</strong>：剥开概念包装，它不属于真正意义上创新的数据模型，而只是一个<strong>经过工程换算的多维数组</strong>。</li>
+                            <li><strong>不存在不可替代的区别</strong>：在数学维度和信息熵上，将其与“普通传感器数据数组”区分开来的，仅仅是“表头字段重命名”和“单位换算过程”（如应变电压转为角度格式）。它并没有创造新的关联维度，只是将隐性的物理关系通过文字标签显性化。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">
+                        你所说的「骨架基础网络」，除了“基于关节角度的坐标系变换/虚拟手映射”，它不可替代的底层逻辑是什么？人手解剖学先验，在这个网络里到底解决了什么纯数学坐标变换解决不了的问题？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <ul>
+                            <li><strong>没有不可替代的底层逻辑</strong>：它就是最常规的正向运动学追踪的草稿。</li>
+                            <li><strong>解剖学先验未解决纯数学以外的难题</strong>：利用指节长度和连接顺序进行坐标系变换（DH参数法），是1980年代至今机器人领域的通识。所谓解剖学先验，在此处仅仅是被用作设定旋转矩阵的静态参数，并没有产生任何超越常规数学坐标系变换的突破。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">
+                        你定义的「传感信号的节点挂载」，核心动作的本质到底是什么？是“把数据填到对应坐标位置”，还是“给原本无物理意义的离散信号，赋予了符合人手解剖规则的空间语义、拓扑关联与物理边界”？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>回归工程现实，其核心动作的本质就是<strong>“把数据填到对应命名的位置中”</strong>。离散信号并非完全无物理意义，之所以需要这个动作，仅仅是因为想要把数据呈现形式切换成对自然语言大模型友好的文本标签。将其拔高为“赋予拓扑关联和物理边界”属于过度陈述。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">
+                        你在这一节提到的「图网络（节点与边）」，和计算机领域通用的图神经网络（GNN）中的“图结构”是同一个概念吗？如果不是，本研究中这个图结构的专属、可落地的定义是什么？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p><strong>绝非同一个概念，甚至不构成真正的图结构。</strong>
+                            通用的图结构包含独立的邻接矩阵供算法运算。本实验中，所谓的“节点与边”仅仅是针对人类手部生理结构的一套固定的称呼，并不参与任何图论级别的计算迭代或网络推导。这种挂靠解剖名词的命名方式，经不起计算机科学对于“创新图结构”的审度。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Level 2 -->
+        <section class="level-section">
+            <div class="level-header">
+                <div class="level-badge">2</div>
+                <h2 class="level-title">目的与手段的剥离提问</h2>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">
+                        你做「骨架网络构建+传感节点挂载」这一整套操作，最终要解决的核心矛盾是什么？是“传感器数据没有位置标注”，还是“散乱的多模态信号，无法被后续模型理解其物理意义、相对关系与动作语义”？
+                    </div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>就 Fig 4 自身而言，解决的客观矛盾仅仅是<strong>“原始仪器输出的数据格式不是统一的物理量度（如度数、牛顿）以及缺乏人类可读的表头注释”。</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">坐标系变换/空间配准，在这套流程里，到底是核心研究目的，还是实现核心目的的必要常规手段？如果只是手段，那你真正要通过这个手段达成的、现有方案做不到的结果是什么？
+                    </div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <ul>
+                            <li><strong>仅仅是极度常规的手段</strong>。</li>
+                            <li>它无法达成任何“现有方案做不到”的结果。只要是做触觉手套数据采集的团队，在数据清理阶段都必然会执行这一校准和配准流程。将常规标定流程作为研究目的进行论述是立不住脚的。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">
+                        如果完全不做这个“图结构化表示”，直接给原始的、带时间戳的传感器一维数组，会给你的全文核心研究目标（触觉词元化、过程性自动化标注），带来什么无法绕过、无法解决的障碍？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <span class="note-text">（注：不引入Fig 5的价值，仅就数据论数据）</span>
+                        <p>如果不做这些操作，导致的是<strong>数据缺乏直观的可解释性</strong>。这和所有数据表分析前不加列名（Column
+                            Name）会导致分析困难的道理一样。这证明了预处理的必要性，但不足以证明它是一项值得被定性为“结构化模型”的创新。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Level 3 -->
+        <section class="level-section">
+            <div class="level-header">
+                <div class="level-badge">3</div>
+                <h2 class="level-title">现有痛点与未被满足需求的锚定提问</h2>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">在你之前的同类柔性触觉手套、多模态触觉采集工作中，对于多模态传感信号的组织方式，行业普遍存在的、未被解决的核心缺陷是什么？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>坦诚面对行业现状，将多模态数据转至统一的物理位置并做同源对齐（Sensor fusion
+                            calibration），已经在大量可穿戴设备研究中被极其成熟地解决，这在动捕领域并不存在明显的“行业空白”。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">直接使用“按硬件编号排序的原始数组”，在后续做触觉词元解码、过程性标注时，会出现什么具体的、可复现的问题？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>将这种比较作为突出 Fig 4
+                            价值的论据是不成立的。对比“完全没标定量纲的数据”和“经过标定换算的数据”，后者天然更好。但把这种毫无悬念的工程常识当作“发现”大书特书，会被同行认为缺乏学术深度。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">现有的其他研究，是怎么解决上述问题的？他们的解决方案有什么无法突破的局限性？你的图结构化表示，和现有方案的核心差异、不可替代性是什么？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>现有研究就是在使用正向运动学和数据映射解决该问题。本节中展示的手段，并未与现有的基线标准算法（Baseline）产生核心差异。因此，这部分工作<strong>不具备不可替代性</strong>。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Level 4 -->
+        <section class="level-section">
+            <div class="level-header">
+                <div class="level-badge">4</div>
+                <h2 class="level-title">核心贡献与独特性（界定提问）</h2>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">你已明确“单纯的坐标系变换并不是科学贡献”，那在这一节的工作中，真正属于本研究的、有创新性的核心贡献到底是什么？请用一句话说清楚。</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>严词拷问下，如果剔除了常规操作，Fig 4 <strong>不存在任何独立的科学贡献与学术创新点</strong>。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">你提出的「手部感知图」结构化数据模型，相比现有技术，带来了什么独一无二的、不可复制的特性？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>它不具有独一无二的特性。任何具备机械动力学背景的研究生，只要拿到这款手套和对应的数据接口，都能按常规操作将各通道信号还原回符合人手规则的特征表上。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">这个贡献，对于你整篇论文的核心定位，到底意味着什么？它是硬件采集能力的必要延伸，还是你提出的“触觉次元自动化标注策略”的核心基础底座？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>它仅仅只是一段不可或缺的数据清洗与格式统一下位机代码。不能因其不可或缺，就将其升格为论文的核心创新点或底座。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">如果把这一节完整放到SI里，你的整篇论文的核心创新点，会出现什么无法弥补的逻辑断层？会不会变成“无源之水”？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p><strong>不会出现断层。</strong>
+                            正如写跑分软件并不需要占用主篇幅去说明操作系统底层如何寻址。向读者交代“我们将仪器采集到的微电压，通过经典动力学映射整理为了具有解剖名称标识的特征矩阵（详细推导见补充文件）”只需一段话的体量，其合理性与充足度已完全足够。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Level 5 -->
+        <section class="level-section">
+            <div class="level-header">
+                <div class="level-badge">5</div>
+                <h2 class="level-title">与全文核心目标的强关联提问</h2>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">你这一节构建的「手部感知图」，是怎么直接支撑fig5里四个维度的触觉词元解码的？没有这个图结构，这两个核心维度的词元解码，是不是根本无法实现？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <span class="note-text">*(注意：不再利用 Fig 5 的重要性来“反向论证” Fig 4 的高大上)*</span>
+                        <p>支撑方式等同于“给系统输入了带有对应坐标的结构体”。只要是个正确格式化的数据表就能实现这个功能，在此套用“图结构”去凸显这是它不可替代的作用是不客观的。如果没有“图结构”（但保留正确格式化的CSV），解码过程亦能完全实现。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">你在fig5里明确提出，要弥补纯视觉VLA模型“视角遮挡带来的动作细节缺失”，那你的「手部感知图」，是怎么为这个目标提供不可替代的支撑的？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>真正弥补遮挡缺失的，是<strong>你手工制造的这只分布了传感器的实体制备柔性手套硬件本身</strong>。并非这套所谓感知图框架。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">你的整篇论文的核心定位是“提出一套基于触觉次元的自动化标注策略”，那fig4的图结构化表示，在这个策略里，到底处于什么核心位置？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>处于“必要但平庸的预处理步骤”。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Level 6 -->
+        <section class="level-section">
+            <div class="level-header">
+                <div class="level-badge">6</div>
+                <h2 class="level-title">价值验证与效果落地的追问</h2>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">你用10秒连贯按摩动作做了验证，那具体的、可量化的验证结果是什么？有没有错误率、一致性的量化对比数据？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <span class="note-text">*(剖析所谓量化验证的天然不可靠性)*</span>
+                        <p><strong>这里存在严重的伪逻辑陷阱</strong>：如果不经过空间映射与换算，原始信号的数据本身就是电压或形变率，不代表具体物理位置（坐标）。拿“计算后的解剖坐标”去和“本就没有坐标含义的模拟量值”比拼“空间语义准确率”，这种对比试验在学术界是无法成立的。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">这个图结构化表示，给后续的触觉词元化、自动化标注，带来了什么可量化的效果提升？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>无法依靠 Fig 4
+                            本身量化效果。给特征标注名称这是非此即彼的步骤，不可能通过对比“有列名的数据”和“没列名的数据”的分析结果，来强行宣称这套结构带来了什么自动化标注提升，这类比较经不起同行推敲。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">对于使用你这个数据集的下游VLA模型来说，用了这个图结构化的数据，相比用原始传感器数组，能获得什么直接的、可落地的好处？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>下游模型当然期望接收已被换算清晰且具备人体结构认知的表，这减轻了网络学习原始映射映射的工作量。但这仅说明了做预处理是应当的常态，并不能反向推导出“基于此提出了某个先进的数据模型”。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Level 7 -->
+        <section class="level-section">
+            <div class="level-header">
+                <div class="level-badge">7</div>
+                <h2 class="level-title">表述逻辑与呈现方式的优化提问</h2>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">如果把当前fig4的表述逻辑，从“步骤式陈述”，改成“1.痛点 2.方案 3.路径 4.价值”的逻辑，你会怎么重构？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>即便重构，也无法掩盖其“技术含量单薄”的本质。当你用最宏大的逻辑去拆解最传统的常规换算操作时，读者只会感觉到更强烈的“强拉概念凑版面”的违和感。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">在fig4的开篇，你能不能用一句话，直接说清楚这一节的核心价值，而不是先讲技术步骤？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>核心价值非常透明：我们必须对柔性器件阵列产生的电信号量进行空间与数值尺度的转换，以便生成标准化、含物理量定义的输入供上层应用调度阅读。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">为了彻底避免“概念包装”的质疑，你会怎么在表述中，明确区分常规操作和创新贡献？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p><strong>唯一的办法就是直接承认这部分不存在独立创新。删去 Fig 4 的独立模块地位。</strong>
+                            如果明确剔除所有的通识与常规操作，那么在这儿寻找所谓的核心创新本身就是一个伪命题。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="question">
+                    <div class="q-icon">Q</div>
+                    <div class="q-text">你怎么在fig4的表述中，提前铺垫和fig5的强逻辑关联，让读者一眼就明白这节工作是基础？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>不需要一整节的图表去铺垫。读者不需要看到一部详细的编译原理才相信代码能够跑起来。只需在引出 Fig 5 之前的一段简单衔接过渡语，即可完备说明数据格式前置条件的成立。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final section -->
+        <section class="level-section">
+            <div class="qa-card ultimate-card">
+                <div class="question">
+                    <div class="q-icon">∞</div>
+                    <div class="q-text" style="font-size: 1.3rem;">
+                        终极收敛提问：如果只能用三句话，向完全不懂这个领域的审稿人，说清楚fig4这一节到底做了什么、解决了什么问题、有什么不可替代的贡献，你会怎么说？</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="answer-wrapper">
+                    <div class="answer">
+                        <p>本节在科学创新领域的贡献极其有限，它客观上仅仅完成了：</p>
+                        <ol>
+                            <li>跑通了一套针对自研多级柔性手套的仪器设备校准标定流程。</li>
+                            <li>利用成熟的运动学原理，把测得的高阻抗电信号变换成了通用角度尺标。</li>
+                            <li>把上述计算结果列进了以具体手部位置命名的常规表格中输出保存，充当底层传感连接上层自然语言应用的数据驱动包而已。<br><br><strong>没有任何理论上的不可替代性。</strong>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Setup accordion functionality
+        document.querySelectorAll('.qa-card').forEach(card => {
+            const question = card.querySelector('.question');
+
+            question.addEventListener('click', () => {
+                const isActive = card.classList.contains('active');
+                const answerWrapper = card.querySelector('.answer-wrapper');
+
+                // Optional: Close others
+                // document.querySelectorAll('.qa-card.active').forEach(c => {
+                //     if (c !== card) {
+                //         c.classList.remove('active');
+                //         c.querySelector('.answer-wrapper').style.maxHeight = null;
+                //     }
+                // });
+
+                if (isActive) {
+                    card.classList.remove('active');
+                    answerWrapper.style.maxHeight = null;
+                } else {
+                    card.classList.add('active');
+                    // Get natural height and set it dynamically
+                    answerWrapper.style.maxHeight = answerWrapper.scrollHeight + "px";
+                }
+            });
+        });
+
+        // Setup Intersection Observer for smooth scroll-in animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.level-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Open the first card automatically for UX
+        setTimeout(() => {
+            const firstCard = document.querySelector('.qa-card');
+            if (firstCard) {
+                firstCard.classList.add('active');
+                const wrapper = firstCard.querySelector('.answer-wrapper');
+                wrapper.style.maxHeight = wrapper.scrollHeight + "px";
+            }
+        }, 800);
+    </script>
+</body>
+
+</html>

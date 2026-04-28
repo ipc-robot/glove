@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多模态触觉建模手套 (触觉元手套) - PPT演示</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #cbd5e1;
+            --bg-light: #f8fafc;
+            --primary: #6d28d9;
+            --secondary: #0284c7;
+            --text-main: #0f172a;
+            --text-sub: #334155;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background: radial-gradient(circle at top left, var(--bg-light), var(--bg-dark));
+            color: var(--text-main);
+        }
+
+        /* Particles / Decorative background */
+        .decoration-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            border-radius: 50%;
+            filter: blur(50px);
+        }
+
+        .decoration-2 {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
+            bottom: -300px;
+            right: -200px;
+            border-radius: 50%;
+            filter: blur(50px);
+        }
+
+        /* Slider Engine */
+        .slider-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1200px;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            /* Equal margin on all 4 sides */
+            box-sizing: border-box;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateZ(-200px) translateY(5vh);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateZ(0) translateY(0);
+        }
+
+        .slide.prev {
+            transform: translateZ(-200px) translateY(-5vh);
+        }
+
+        /* Slide Content Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 50px 70px;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        /* For the cover slide, a transparent look and perfectly centered content */
+        .slide.cover .card {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            backdrop-filter: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            padding: 0;
+            /* Remove padding for perfect centering */
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1e1b4b, #4f46e5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-top: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(34, 211, 238, 0.2);
+            padding-bottom: 15px;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        p,
+        li {
+            font-size: 1.15rem;
+            color: var(--text-sub);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(15, 23, 42, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-nav {
+            background: rgba(15, 23, 42, 0.05);
+            border: none;
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .progress {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            font-variant-numeric: tabular-numeric;
+            margin: 0 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="decoration-1"></div>
+    <div class="decoration-2"></div>
+
+    <div class="slider-container" id="slider">
+        <!-- Slide 1: Cover -->
+        <div class="slide cover active">
+            <div class="card">
+                <p style="color: var(--secondary); font-weight: 600; letter-spacing: 2px; text-transform: uppercase;">
+                    面向具身智能的主动触觉感知</p>
+                <h1>用于动作生成式，手部姿态追踪与接触状态重建的<br /><span style="color: var(--primary);">多模态触觉建模手套</span></h1>
+                <p style="font-size: 1.4rem; color: var(--text-sub); margin-top: 30px;">
+                    触觉元手套：填补视觉-语言-动作 (VLA) 模型中的"过程性触觉语义"缝隙
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: OpenClaw 对话记录 -->
+        <div class="slide">
+            <div class="card">
+                <h2>OpenClaw 对话记录：采集卡控制示例</h2>
+                <div style="display: flex; flex-direction: column; height: calc(100% - 140px);">
+                    <!-- 聊天记录 -->
+                    <div style="flex: 1; display: flex; flex-direction: column; background: rgba(255,255,255,0.6); border-radius: 16px; padding: 20px; overflow-y: auto;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">OC</div>
+                            <div>
+                                <div style="font-weight: 700; color: var(--text-main);">OpenClaw TUI</div>
+                                <div style="font-size: 0.85rem; color: var(--text-sub);">session: minimax_final | agent: main</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="align-self: flex-start; background: rgba(226,232,240,0.5); padding: 8px 14px; border-radius: 16px; font-size: 0.8rem; color: var(--text-sub);">
+                                openclaw tui - ws://127.0.0.1:18789 - agent main - session minimax_final
+                            </div>
+
+                            <div style="align-self: flex-end; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 18px; border-radius: 18px; border-bottom-right-radius: 4px; max-width: 70%;">
+                                你好
+                            </div>
+
+                            <div style="align-self: flex-start; background: white; border: 1px solid rgba(226,232,240,0.8); padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px; max-width: 85%; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                                你好！👋我注意到这是一个全新的工作空间 —— 有个 BOOTSTRAP.md 文件在等着我。看来我刚上线，还没有记忆。你是谁不重要，重要的是 —— 你是第一个跟我说话的人。😊你想聊聊天，还是有什么我可以帮忙的？
+                            </div>
+
+                            <div style="align-self: flex-end; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 18px; border-radius: 18px; border-bottom-right-radius: 4px; max-width: 70%;">
+                                开始采集
+                            </div>
+
+                            <div style="align-self: flex-start; background: white; border: 1px solid rgba(226,232,240,0.8); padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px; max-width: 85%; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                                让我用后台模式运行：采集已经在后台启动了！✅ 数据将写入 ./data/capture.csv，采样率 100Hz，持续获取 CH1、CH2 通道的电压数据。要停止采集时告诉我 "停止采集"。
+                            </div>
+
+                            <div style="align-self: flex-end; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 18px; border-radius: 18px; border-bottom-right-radius: 4px; max-width: 70%;">
+                                尝试读取一些最新的数据
+                            </div>
+
+                            <div style="align-self: flex-start; background: white; border: 1px solid rgba(226,232,240,0.8); padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px; max-width: 90%; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                                <div style="font-weight: 600; margin-bottom: 8px;">📊 实时采集数据（最新 15 条）：</div>
+                                <div style="background: #0f172a; color: #38bdf8; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; overflow-x: auto;">
+<pre>┌─────────────────────────┬───────┬───────┐
+│ Time                    │ CH1   │ CH2   │
+├─────────────────────────┼───────┼───────┤
+│ 2026-04-04 22:13:16.848 │ 2.08  │ 3.682 │
+│ 2026-04-04 22:13:16.838 │ 2.232 │ 3.612 │
+│ 2026-04-04 22:13:16.828 │ 2.116 │ 3.681 │
+│ ...                     │ ...   │ ...   │
+└─────────────────────────┴───────┴───────┘</pre>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 0.95rem;">采集正在运行中，采样率约 100Hz。CH1 围绕 2.5V 正弦波动，CH2 围绕 3.3V 余弦波动。</div>
+                            </div>
+
+                            <div style="align-self: flex-end; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 12px 18px; border-radius: 18px; border-bottom-right-radius: 4px; max-width: 70%;">
+                                停止采集
+                            </div>
+
+                            <div style="align-self: flex-start; background: white; border: 1px solid rgba(226,232,240,0.8); padding: 12px 18px; border-radius: 18px; border-bottom-left-radius: 4px; max-width: 85%; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                                <div style="font-weight: 600;">采集已停止！✅</div>
+                                <div style="margin-top: 8px;">共采集 25,283 条数据记录（耗时约 4 分 13 秒）。</div>
+                                <div style="margin-top: 8px; font-size: 0.95rem; color: var(--text-sub);">数据文件保存在 ./data/capture.csv，要再次采集或查看数据随时告诉我。</div>
+                            </div>
+
+                            <div style="align-self: flex-start; background: rgba(226,232,240,0.5); padding: 8px 14px; border-radius: 16px; font-size: 0.8rem; color: var(--text-sub);">
+                                connected | idle<br>
+                                agent main | session minimax_final | tokens 22k/32k (68%)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 底部提示 -->
+                    <div style="margin-top: 20px;">
+                        <div style="background: rgba(139, 92, 246, 0.05); padding: 15px 20px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.2);">
+                            <p style="margin: 0; font-weight: 600; font-size: 1.15rem;">采集卡已接入OpenClaw。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: 手部姿态追踪与接触模型 -->
+        <div class="slide">
+            <div class="card">
+                <h2>手部姿态追踪与接触模型 — <a href="https://ipc-robot.github.io/" target="_blank" style="color: var(--secondary); text-decoration: underline;">https://ipc-robot.github.io/</a></h2>
+                <div style="width: 100%; height: calc(100% - 100px); margin-top: 20px;">
+                    <iframe src="https://ipc-robot.github.io/" style="width: 100%; height: 100%; border: none; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Timeline -->
+        <div class="slide">
+            <div class="card">
+                <h2>后续工作推进与时间计划表</h2>
+
+                <div
+                    style="margin-top: 30px; margin-left: 20px; display: flex; flex-direction: column; gap: 20px; position: relative; padding-left: 40px; border-left: 4px solid rgba(109, 40, 217, 0.2);">
+
+                    <div style="position: relative; opacity: 0.5;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #94a3b8; border: 4px solid #64748b;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #64748b; font-size: 1.2rem; text-decoration: line-through;">4月第一周 (4.1 -
+                            4.7)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: #64748b; text-decoration: line-through;">启动 Fig 1-3
+                            的论文主干写作（单器件数据已齐备）；同时开展手部姿态追踪与接触模型（Fig 4）的设计与实现。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #10b981;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #10b981; font-size: 1.2rem;">4月第二周 (4.8 -
+                            4.14)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">
+                            推进系统级验证环节，重点开展触觉过程性语义自动化标注策略（Fig 5）的设计与实现。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #eab308;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #eab308; font-size: 1.2rem;">4月第三周 (4.15 -
+                            4.21)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">完成验证实验；集中撰写涉及宏观算法（Fig 4 - Fig
+                            5）的 Results 段落，并推进 Method 部分内容的写作。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #f97316;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #f97316; font-size: 1.2rem;">4月第四周 (4.22 -
+                            4.28)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">完成 Introduction、Discussion 与
+                            Abstract，确定全文逻辑主线并组装主干内容。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #ec4899;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #ec4899; font-size: 1.2rem;">5月第一周 (4.29 -
+                            5.5)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">编制补充材料
+                            (SI)，包括实验细节、视频制作、图表检查与参考文献校对排版。</p>
+                    </div>
+
+                    <div
+                        style="position: relative; background: rgba(139, 92, 246, 0.05); padding: 15px 20px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.2); left: -20px; width: calc(100% + 20px);">
+                        <div
+                            style="position: absolute; left: -32px; top: 15px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #6d28d9; box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.1);">
+                        </div>
+                        <h3
+                            style="margin-top: 0; margin-bottom: 4px; color: #6d28d9; font-size: 1.3rem; font-weight: 800;">
+                            5月中旬 (5.6 - 5.15)</h3>
+                        <p style="margin: 0; font-size: 1.1rem; font-weight: 600; color: #4c1d95;">正式完成论文初稿 (First
+                            Draft)，提交团队内部审阅，开始收集意见并进入多轮打磨阶段。</p>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div
+                            style="position: absolute; left: -52px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #ef4444;">
+                        </div>
+                        <h3 style="margin-top: 0; margin-bottom: 4px; color: #ef4444; font-size: 1.2rem;">5月底 - 6月上旬
+                            (最终定稿与投稿)</h3>
+                        <p style="margin: 0; font-size: 1.05rem; color: var(--text-sub);">完成各方修改意见的整合与终稿排版，正式提交手稿。<br />
+                            <strong style="color: #b91c1c; font-size: 1.1rem;">目标期刊：</strong>
+                            <strong>FlexMat</strong>、<strong>npj Flexible
+                                Electronics</strong>、<strong>Advanced Science</strong>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div> <!-- .slider-container -->
+
+    <div class="controls">
+        <button class="btn-nav" id="btn-prev">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 18l-6-6 6-6" />
+            </svg>
+        </button>
+        <div class="progress"><span id="curr-slide">1</span> / <span id="total-slide">4</span></div>
+        <button class="btn-nav" id="btn-next">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6" />
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const currSlideEl = document.getElementById('curr-slide');
+            document.getElementById('total-slide').textContent = totalSlides;
+
+            let currentIndex = 0;
+
+            function updateSlides() {
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active', 'prev');
+                    if (index === currentIndex) {
+                        slide.classList.add('active');
+                    } else if (index < currentIndex) {
+                        slide.classList.add('prev');
+                    }
+                });
+                currSlideEl.textContent = currentIndex + 1;
+            }
+
+            function goNext() {
+                if (currentIndex < totalSlides - 1) {
+                    currentIndex++;
+                    updateSlides();
+                }
+            }
+
+            function goPrev() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateSlides();
+                }
+            }
+
+            btnNext.addEventListener('click', goNext);
+            btnPrev.addEventListener('click', goPrev);
+
+            // Keyboard navigation
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'Enter') {
+                    goNext();
+                } else if (e.key === 'ArrowLeft') {
+                    goPrev();
+                }
+            });
+
+            // Initial render
+            updateSlides();
+        });
+    </script>
+</body>
+
+</html>
