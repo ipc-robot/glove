@@ -8,5 +8,5 @@ export default defineConfig(({ command }) => ({
     port: 5173,
     strictPort: false,
   },
-  base: command === 'build' ? '/research-slides/' : '/'
+  base: command === 'build' ? '/glove/' : '/'
 }))
