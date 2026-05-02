@@ -27,3 +27,4 @@ venv.bak/
 # 强制保留渲染的图片（即使上级目录被忽略）
 !**/renders/**/*.png
 !**/renders/**/*.svg
+ 
